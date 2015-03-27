@@ -4,7 +4,7 @@
     	var settings = $.extend({
     		arr: [378,379,311,537,378,115,405,51,130,295,187,655,269,295,559,521,133,665,164,195],
     		backgroundColor: "#323232",
-    		xPadding: 80,
+    		xPadding: 60,
     		yPadding: 60
     	}, $.fn.graphify.defaults, options);
 
@@ -32,14 +32,16 @@
 		// Label Axis
 		// Y Axis
 		for (var i = 0; i < yAxisPoints + 1; i++) {
-			var x = max / yAxisPoints;
-			placeText(19,(height - ((i * x) * yScale)) - yp, x * i,'#aaa')
+			var x = xp - 10,
+				y = (height - yp) - (i * ((height - 2 * yp) / yAxisPoints)),
+				text = min + (i * (range / yAxisPoints));
+			placeText(x, y, text, '#aaa')
 		};
 
 		// Draw Grid
 		for (var i = 0; i < yAxisPoints + 1; i++) {
 			var x1 = xp,
-				y1 = (height - ((i * x) * yScale)) - yp,
+				y1 = (height - yp) - (i * ((height - 2 * yp) / yAxisPoints)),
 				x2 = width - xp,
 				y2 = y1;
 			drawLine(x1, y1, x2, y2,'#444')
@@ -49,15 +51,18 @@
 			drawLine(xp, yp, xp, height - yp, '#aaa', '#aaa') // Y Axis
 			drawLine(xp, height - yp, width - xp, height - yp); // X Axis
 
-		console.log("max = " + max);
-		console.log("min = " + min);
+			console.log("max = " + max);
+			console.log("min = " + min);
+			console.log("range = " + range);
+
 
 
 		function placeText (x, y, text, color) {
 			ctx.fillStyle = color;
 			ctx.font = '14px sans-serif';
 			ctx.textBaseline = 'bottom';
-			ctx.fillText(text, x - 14, y + 14);
+			ctx.textAlign = 'right';
+			ctx.fillText(text, x, y + 14);
 		}
 
 		function drawLine(x1, y1, x2, y2, rgba) {
@@ -77,7 +82,8 @@
 			ctx.beginPath();
 			ctx.lineWidth = 3;
 			ctx.moveTo(x1,y1);
-			ctx.lineTo(x2,y2);
+			// ctx.lineTo(x2,y2);
+			ctx.bezierCurveTo(x2, y2, x2, y2, x2, y2);
 			ctx.stroke();
 		}
 
