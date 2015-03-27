@@ -1,0 +1,20 @@
+to view visual progression see graphify/images
+image generated from right click, "save as"
+
+V0.1 (pre-alpha)
+Initial design implementation 
+generate single line plot graph based on input array
+
+v0.2 (pre-alpha)
+- addition of background colors
+- basic padding
+- x & y axis lines
+- y axis labeling (beta) //need to determine scale
+
+v0.3 (pre-alpha)
+- addition of gradient line function 
+- differentiation between x-padding and y-padding (split into "left", "right", "top", "bottom" in future revisions)
+- bug fix of y-axis scale labels
+- introduction of horizontal grid lines
+(included basic array generation script in assets)
+

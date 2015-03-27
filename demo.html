@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Graph</title>
+	<style>
+		#graph{
+			/*TEMP*/
+			margin: 40px auto;
+			display: block;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="graph" width="1000" height="600"></canvas>
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script src="js/math.js"></script>
+	<script src="js/graphify.js"></script>
+	<script>
+
+		 // function callback
+		 $('#graph').graphify({
+		 	arr: [10378,10379,10311,10130,10295,10187,10655,10269,10295,10559,10521,10133,10665,10164,10195]
+		 });
+
+	</script>
+</body>
+</html>

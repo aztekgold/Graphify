@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+	#graph{
+		background-color: #ddd;
+	}
+	</style>
+</head>
+<body>
+	<canvas id="graph" height="200" width"600"></canvas>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script>
+		var el = document.getElementById('graph');
+		var ctx = el.getContext('2d');
+
+		function drawLine(x1, y1, x2, y2, rgba) {
+			ctx.beginPath();
+			ctx.strokeStyle = rgba;
+			ctx.moveTo(x1,y1);
+			ctx.lineTo(x2,y2);
+			ctx.stroke();
+		}
+
+		drawLine(20, 10, 11, 19, "#f00");
+
+	</script>
+</body>
+</html>
