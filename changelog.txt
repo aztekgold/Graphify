@@ -18,3 +18,7 @@ v0.3 (pre-alpha)
 - introduction of horizontal grid lines
 (included basic array generation script in assets)
 
+v0.4 (pre-alpha)
+- handles multiple data sets
+- line color customization (graph, axis, grids)
+- handles negative values 

@@ -2,16 +2,29 @@
 
 		// Establish our default settings
     	var settings = $.extend({
-    		arr: [378,379,311,537,378,115,405,51,130,295,187,655,269,295,559,521,133,665,164,195],
+    		data: [],
     		backgroundColor: "#323232",
-    		xPadding: 60,
-    		yPadding: 60
+    		xPadding: 80,
+    		yPadding: 60,
+    		yAxisPoints: 5,
+    		gridLineColor: "aaa",
+    		lineColors: [["#0af", "#f00"],["#bed123"],["brown"]],
+    		axisColor: '#aaa'
     	}, $.fn.graphify.defaults, options);
 
-    	var arr = settings.arr;
 
-		var max = M.graph.max(arr);
-		var min = M.graph.min(arr);
+    	// find Min/Max of all data arrays
+    	var testMax = -Infinity, testMin = Infinity; 
+    	for (var i = 0; i < settings.data.length; i++) {
+    		var dataArrMax = M.graph.max(settings.data[i]),
+    			dataArrMin = M.graph.min(settings.data[i]);
+    		testMax = (dataArrMax > testMax) ? dataArrMax : testMax;
+    		testMin = (dataArrMin < testMin) ? dataArrMin : testMin;
+    	}
+    	
+    	var arr = settings.data[0];
+		var max = testMax;
+		var min = testMin
 		var xp = settings.xPadding;
 		var yp = settings.yPadding
 		var range = max - min;
@@ -19,8 +32,9 @@
 		var height = this.height();
 		var xScale = (this.width() - (xp*2)) / (arr.length -1);
 		var yScale = (height - (yp *2)) / range;
-		var yAxisPoints = 5;
-    	
+		var yAxisPoints = settings.yAxisPoints;
+		var uom = ""; 
+		
     	var elementId = $(this).attr("id");
 		var canvas = document.getElementById(elementId)
 		var ctx	= canvas.getContext("2d");
@@ -35,7 +49,7 @@
 			var x = xp - 10,
 				y = (height - yp) - (i * ((height - 2 * yp) / yAxisPoints)),
 				text = min + (i * (range / yAxisPoints));
-			placeText(x, y, text, '#aaa')
+			placeText(x, y, text+uom, '#aaa')
 		};
 
 		// Draw Grid
@@ -44,12 +58,12 @@
 				y1 = (height - yp) - (i * ((height - 2 * yp) / yAxisPoints)),
 				x2 = width - xp,
 				y2 = y1;
-			drawLine(x1, y1, x2, y2,'#444')
+			drawLine(x1, y1, x2, y2, settings.gridLineColor)
 		};
 
 		// Draw Axis'
-			drawLine(xp, yp, xp, height - yp, '#aaa', '#aaa') // Y Axis
-			drawLine(xp, height - yp, width - xp, height - yp); // X Axis
+			drawLine(xp, yp, xp, height - yp, settings.axisColor) // Y Axis
+			drawLine(xp, height - yp, width - xp, height - yp, settings.axisColor); // X Axis
 
 			console.log("max = " + max);
 			console.log("min = " + min);
@@ -75,6 +89,7 @@
 		}
 
 		function drawGradLine(x1, y1, x2, y2, rgb1, rgb2) {
+			rgb2 = (rgb2 == undefined) ? rgb1 : rgb2;
 			var grad = ctx.createLinearGradient(0, 0, width, 0);
 			grad.addColorStop(0, rgb1); //"#F89406"
 			grad.addColorStop(1, rgb2); //"#03C9A9"
@@ -87,15 +102,17 @@
 			ctx.stroke();
 		}
 
-
-		this.each(function(){
-			for (var i = 0; i < arr.length - 1; i++) {
-			var	x1 = (i * xScale) + xp,
-			 	y1 = (height  - ((arr[i] - min) * yScale)) - yp,
-				x2 = ((i+1) * xScale) + xp,
-				y2 = (height - ((arr[i+1] - min) * yScale)) - yp;
-			drawGradLine(x1, y1, x2, y2, "#F89406", "#03C9A9");
+		// Plot Graph(s)
+		for (var z = 0; z < settings.data.length; z++) {
+			for (var i = 0; i < settings.data[z].length - 1; i++) {
+				var	x1 = (i * xScale) + xp,
+			 		y1 = (height  - ((settings.data[z][i] - min) * yScale)) - yp,
+					x2 = ((i+1) * xScale) + xp,
+					y2 = (height - ((settings.data[z][i+1] - min) * yScale)) - yp;
+				drawGradLine(x1, y1, x2, y2, settings.lineColors[z][0], settings.lineColors[z][1]);
 			};
-		})
-
+		};
+		
 		}
+
+		
